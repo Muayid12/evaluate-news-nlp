@@ -13,18 +13,17 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "axios": "^1.7.9",
+    "axios": "^1.9.0",
     "body-parser": "^1.20.3",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
     "cost": "^1.2.3",
     "css-loader": "^6.10.0",
     "dotenv": "^16.4.5",
-    "express": "^4.17.1",
+    "express": "^4.21.2",
     "node-fetch": "^3.3.2",
     "style-loader": "^3.3.4",
-    "undici": "5.11.0",
-    "webpack-cli": "^5.1.4"
+    "undici": "5.11.0"
   },
   "overrides": {
     "undici": "5.11.0"
@@ -41,7 +40,7 @@
     "sass": "^1.72.0",
     "sass-loader": "^14.1.1",
     "terser-webpack-plugin": "^5.3.14",
-    "webpack": "^5.90.3",
+    "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.0.2",
     "workbox-webpack-plugin": "^7.0.0"
   }
