@@ -84,7 +84,7 @@ function setupTestButton() {
     if (form) form.after(testBtn); // Adds button after the form
 }
 
-// Initialize when DOM loads
+
 document.addEventListener('DOMContentLoaded', () => {
     setupTestButton();
 });
