@@ -1,19 +1,14 @@
-function checkForName(inputText) {
-    console.log("::: Running checkForName :::", inputText);
-    let names = [
-        "Picard",
-        "Janeway",
-        "Kirk",
-        "Archer",
-        "Georgiou"
-    ];
+function checkForURL(inputText) {
+    console.log("::: Running checkForURL :::", inputText);
 
-    if(names.includes(inputText)) {
-        alert("Welcome, Captain!");
-    }
-    else {
-        alert("Enter a valid captain name");
+    
+    const urlPattern = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w-]*)*\/?(\?.*)?$/i;
+
+    if (urlPattern.test(inputText)) {
+        alert("Valid URL!");
+    } else {
+        alert("Enter a valid URL");
     }
 }
 
-export { checkForName };
+export { checkForURL };
