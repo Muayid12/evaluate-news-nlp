@@ -5,8 +5,7 @@ function checkForName(inputText) {
         "Janeway",
         "Kirk",
         "Archer",
-        "Georgiou",
-		"Muayid"
+        "Georgiou"
     ];
 
     if(names.includes(inputText)) {
