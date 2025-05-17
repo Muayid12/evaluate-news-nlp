@@ -1,4 +1,4 @@
-import { checkForURL } from '../../src/client/js/checker';
+import { checkForURL } from '@/checker';
 
 describe('Testing the checkForURL functionality', () => {
   test('checkForURL should be defined', () => {
@@ -6,12 +6,10 @@ describe('Testing the checkForURL functionality', () => {
   });
 
   test('checkForURL should return true for valid URL', () => {
-    const validURL = 'https://www.example.com';
-    expect(checkForURL(validURL)).toBe(true);
+    expect(checkForURL('https://example.com')).toBe(true);
   });
 
   test('checkForURL should return false for invalid URL', () => {
-    const invalidURL = 'not_a_url';
-    expect(checkForURL(invalidURL)).toBe(false);
+    expect(checkForURL('not_a_url')).toBe(false);
   });
 });
