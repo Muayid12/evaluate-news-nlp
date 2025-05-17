@@ -1,92 +1,60 @@
 import { checkForURL } from './checker';
 
-const NLP_API_ENDPOINT = 'https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer'; // something wrong with this
+const NLP_API_ENDPOINT = 'http://localhost:8081/analyze';
 
 async function handleSubmit(event) {
     event.preventDefault();
     const url = document.getElementById('name').value.trim();
-    
+
     if (!url || !checkForURL(url)) return;
 
     try {
-        document.getElementById('results').innerHTML = '<div class="loading">Analyzing URL...</div>';
-        console.log("Attempting to fetch:", NLP_API_ENDPOINT);
-        
-        const response = await fetch(NLP_API_ENDPOINT, {
+        document.getElementById('results').innerHTML = '<div class="loading">Fetching and analyzing content...</div>';
+
+        const apiResponse = await fetch(NLP_API_ENDPOINT, {
             method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                // 'x-api-key': 'your-api-key-here' // No idea yet if there's api key 
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url })
         });
 
-        console.log("Response status:", response.status);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("API Error Details:", errorData);
-            throw new Error(errorData.message || 'API request failed');
+        if (!apiResponse.ok) {
+            const { message } = await apiResponse.json();
+            throw new Error(message || 'Unknown error during analysis');
         }
 
-        const analysis = await response.json();
-        console.log("API Response:", analysis);
-        renderResults(analysis);
-        
+        const analysis = await apiResponse.json();
+        renderResults(analysis, analysis.snippet);
+
     } catch (error) {
-        console.error("Full Error:", error);
+        console.error("Error:", error);
         document.getElementById('results').innerHTML = `
             <div class="error">
-                Analysis failed: ${error.message}<br>
-                Check console for details
+                ❌ Analysis failed: ${error.message}<br>
+                ⚠️ Please try a public article.
             </div>
         `;
     }
 }
 
-function renderResults(data) {
+function renderResults(data, snippet) {
+    const scores = data.sentiment_scores;
+
     document.getElementById('results').innerHTML = `
         <div class="result-card">
             <h3>Analysis Results</h3>
-            <p><strong>Sentiment:</strong> ${getSentimentLabel(data.polarity)}</p>
-            <p><strong>Subjectivity:</strong> ${getSubjectivityLabel(data.subjectivity)}</p>
-            <p><strong>Text Preview:</strong> ${data.snippet || 'No text extracted'}</p>
+            <p><strong>Character Count:</strong> ${snippet.length} / 200</p>
+            <p><strong>Sentiment:</strong> ${data.sentiment}</p>
+            <p><strong>Scores:</strong></p>
+            <ul>
+                <li>Positive: ${scores.Positive}</li>
+                <li>Negative: ${scores.Negative}</li>
+                <li>Neutral: ${scores.Neutral}</li>
+                <li>Mixed: ${scores.Mixed}</li>
+            </ul>
+			<br>
+            <p><strong>Text Preview:</strong> ${snippet}</p>
         </div>
     `;
 }
-
-function getSentimentLabel(polarity) {
-    if (polarity > 0.2) return 'Positive';
-    if (polarity < -0.2) return 'Negative';
-    return 'Neutral';
-}
-
-function getSubjectivityLabel(score) {
-    return score > 0.5 ? 'Subjective' : 'Objective';
-}
-
-// for test reason only 
-function setupTestButton() {
-    const testURL = 'https://www.udacity.com/blog/2024/04/project-based-learning-in-tech-the-value-of-hands-on-education-in-a-digital-age.html';
-    
-    const testBtn = document.createElement('button');
-    testBtn.id = 'testButton';
-    testBtn.className = 'test-button';
-    testBtn.textContent = 'Test with Udacity Blog';
-    
-    testBtn.addEventListener('click', (e) => {
-        e.preventDefault();
-        document.getElementById('name').value = testURL;
-        handleSubmit(new Event('submit'));
-    });
-
-    const form = document.getElementById('urlForm');
-    if (form) form.after(testBtn); // Adds button after the form
-}
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    setupTestButton();
-});
 
 export { handleSubmit };
