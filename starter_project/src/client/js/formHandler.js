@@ -17,20 +17,29 @@ async function handleSubmit(event) {
             body: JSON.stringify({ url })
         });
 
-        if (!apiResponse.ok) {
-            const { message } = await apiResponse.json();
-            throw new Error(message || 'Unknown error during analysis');
-        }
+        if (!apiResponse.ok) throw new Error('Server error');
 
         const analysis = await apiResponse.json();
         renderResults(analysis, analysis.snippet);
+        saveToLocalStorage(url, analysis);
+        return analysis;
 
     } catch (error) {
-        console.error("Error:", error);
+        console.warn("Server offline. Trying cache...");
+
+        const cached = loadFromLocalStorage(url);
+        if (cached) {
+            renderResults(cached.result, cached.result.snippet);
+            document.getElementById('results').innerHTML += `
+                <div class="notice">⚠️ Showing cached result. Server may be offline.</div>
+            `;
+            return cached.result;
+        }
+
         document.getElementById('results').innerHTML = `
             <div class="error">
-                ❌ Analysis failed: ${error.message}<br>
-                ⚠️ Please try a public article.
+                ❌ Could not analyze URL.<br>
+                ⚠️ No cached result found.
             </div>
         `;
     }
@@ -38,7 +47,6 @@ async function handleSubmit(event) {
 
 function renderResults(data, snippet) {
     const scores = data.sentiment_scores;
-
     document.getElementById('results').innerHTML = `
         <div class="result-card">
             <h3>Analysis Results</h3>
@@ -51,10 +59,23 @@ function renderResults(data, snippet) {
                 <li>Neutral: ${scores.Neutral}</li>
                 <li>Mixed: ${scores.Mixed}</li>
             </ul>
-			<br>
-            <p><strong>Text Preview:</strong> ${snippet}</p>
+            <p><strong>Text Preview:</strong></p>
+            <p>${snippet}</p>
         </div>
     `;
+}
+
+function saveToLocalStorage(url, analysis) {
+    const prev = JSON.parse(localStorage.getItem('savedAnalyses')) || [];
+    const entry = { url, timestamp: new Date().toISOString(), result: analysis };
+    const filtered = prev.filter(e => e.url !== url);
+    filtered.unshift(entry);
+    localStorage.setItem('savedAnalyses', JSON.stringify(filtered.slice(0, 10)));
+}
+
+function loadFromLocalStorage(url) {
+    const saved = JSON.parse(localStorage.getItem('savedAnalyses')) || [];
+    return saved.find(e => e.url === url);
 }
 
 export { handleSubmit };

@@ -10,7 +10,8 @@ module.exports = {
     mode: 'production',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'main.js',
+        filename: 'main.[contenthash].js', // cache-busting
+        clean: true, // cleans /dist before build
         libraryTarget: 'var',
         library: 'Client'
     },
@@ -23,28 +24,59 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader']
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            implementation: require('sass'),
+                            sassOptions: {
+                                quietDeps: true
+                            }
+                        }
+                    }
+                ]
             }
         ]
     },
     optimization: {
         minimize: true,
-        minimizer: [
-            new TerserPlugin()
-        ]
+        minimizer: [new TerserPlugin()]
     },
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/client/views/index.html",
             filename: "./index.html",
         }),
-        new WorkboxPlugin.GenerateSW(),
         new MiniCssExtractPlugin({
-            filename: "[name].css"
-        })
+            filename: "[name].[contenthash].css"
+        }),
+        new WorkboxPlugin.GenerateSW({
+            clientsClaim: true,
+            skipWaiting: true,
+            runtimeCaching: [
+                {
+                    urlPattern: /\.(?:js|css|html|json|png|jpg|jpeg|svg)$/,
+                    handler: 'CacheFirst',
+                    options: {
+                        cacheName: 'assets',
+                        expiration: {
+                            maxEntries: 50,
+                            maxAgeSeconds: 7 * 24 * 60 * 60, // 1 week
+                        },
+                    },
+                },
+            ]
+        }),
     ],
     devServer: {
         port: 3000,
-        allowedHosts: 'all'
+        allowedHosts: 'all',
+        static: {
+            directory: path.join(__dirname, 'dist'),
+        },
+        compress: true,
+        open: true,
     }
 };

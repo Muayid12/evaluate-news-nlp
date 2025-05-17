@@ -1,55 +1,69 @@
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebPackPlugin = require("html-webpack-plugin")
-const { CleanWebpackPlugin } = require('clean-webpack-plugin')
+const path = require('path');
+const HtmlWebPackPlugin = require("html-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
     entry: './src/client/index.js',
     mode: 'development',
     devtool: 'source-map',
-    stats: 'verbose',
-    output: {
-        path: path.resolve(__dirname, 'dist'),
-        filename: 'main.js',
-        libraryTarget: 'var',
-        library: 'Client'
+    stats: {
+        all: false,
+        warnings: true,
+        errors: true,
+        warningsFilter: [
+            /sass-loader.*deprecated/i,
+            /legacy-js-api/i
+        ]
     },
-    devServer: {
-        port: 8080,
-        static: path.resolve(__dirname, 'dist'),
-        hot: true,
-        open: true
+    output: {
+        filename: 'main.js',
+        publicPath: '/', // 🔧 Needed for devServer static serving
     },
     module: {
         rules: [
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
-                loader: "babel-loader"
+                loader: 'babel-loader'
             },
             {
                 test: /\.scss$/,
-                use: [ 'style-loader', 'css-loader', 'sass-loader' ]
-        }
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            implementation: require('sass'),
+                            sassOptions: {
+                                quietDeps: true
+                            }
+                        }
+                    }
+                ]
+            }
         ]
     },
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/client/views/index.html",
-            filename: "./index.html",
+            filename: "index.html",
         }),
         new CleanWebpackPlugin({
-            // Simulate the removal of files
-            dry: true,
-            // Write Logs to Console
+            dry: false,
             verbose: true,
-            // Automatically remove all unused webpack assets on rebuild
             cleanStaleWebpackAssets: true,
             protectWebpackAssets: false
         })
     ],
     devServer: {
+        static: {
+            directory: path.resolve(__dirname, 'src', 'client', 'views'), // 🔧 serve directly from views
+        },
+        compress: true,
         port: 3001,
-        allowedHosts: 'all'
+        hot: true,
+        open: true,
+        historyApiFallback: true
     }
-}
+};
