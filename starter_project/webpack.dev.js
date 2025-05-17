@@ -17,7 +17,7 @@ module.exports = {
     },
     output: {
         filename: 'main.js',
-        publicPath: '/', // 🔧 Needed for devServer static serving
+        publicPath: '/', // Needed for devServer static serving
     },
     module: {
         rules: [
@@ -58,7 +58,7 @@ module.exports = {
     ],
     devServer: {
         static: {
-            directory: path.resolve(__dirname, 'src', 'client', 'views'), // 🔧 serve directly from views
+            directory: path.resolve(__dirname, 'src', 'client', 'views'), //serve directly from views
         },
         compress: true,
         port: 3001,
