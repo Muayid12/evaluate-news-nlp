@@ -54,7 +54,7 @@ npm install
 ## 🧪 Run Tests
 
 ```bash
-"npm run test"  
+  npm run test
 ```
 
 - Uses **Jest** to test JS functions (e.g., URL checker and form handler)
