@@ -22,9 +22,6 @@ A web app that checks and analyzes any article link using Natural Language Proce
 git clone https://github.com/Muayid12/evaluate-news-nlp.git
 cd evaluate-news-nlp/starter_project
 npm install
-npm run build-prod
-npm run start
-
 ```
 
 ---
@@ -32,8 +29,19 @@ npm run start
 ## 🚀 Run the App (Development)
 
 ```bash
-npm run build-dev
-npm run start
+"npm run start" it run both server and Development 
+for offline "npm run build-prod". It require server express to running 
+```
+
+- This runs the Express server (http://localhost:3001)
+- Also opens your default browser automatically
+
+---
+
+## 🚀 Run the App (Development)
+
+```bash
+"npm run build-prod". It run both server and build production dist
 ```
 
 - This runs the Express server (http://localhost:8081)
@@ -44,7 +52,7 @@ npm run start
 ## 🧪 Run Tests
 
 ```bash
-npm run test
+"npm run test"  
 ```
 
 - Uses **Jest** to test JS functions (e.g., URL checker and form handler)
