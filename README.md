@@ -29,8 +29,9 @@ npm install
 ## 🚀 Run the App (Development)
 
 ```bash
-"npm run start" it run both server and Development 
-for offline "npm run build-prod". It require server express to running 
+✅ npm run start — Runs both the Express server and the Webpack development server together.
+
+🌐 npm run build-dev — Builds the development bundle, but requires the Express server to be running for full functionality.
 ```
 
 - This runs the Express server (http://localhost:3001)
@@ -38,10 +39,12 @@ for offline "npm run build-prod". It require server express to running
 
 ---
 
-## 🚀 Run the App (Development)
+## 🚀 Run the App (Production)
 
 ```bash
-"npm run build-prod". It run both server and build production dist
+🏗️ npm run build-prod — Builds the project for production and starts the Express server.
+
+📦 Offline Mode: To test offline, simply open dist/index.html in your browser (after the build is complete).
 ```
 
 - This runs the Express server (http://localhost:8081)
