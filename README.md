@@ -48,7 +48,6 @@ npm install
 ```
 
 - This runs the Express server (http://localhost:8081)
-- Also opens your default browser automatically
 
 ---
 
