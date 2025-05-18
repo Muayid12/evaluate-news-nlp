@@ -74,5 +74,4 @@ async function fetchWithPuppeteer(url) {
 
 app.listen(PORT, async () => {
     console.log(`🚀 Server running at http://localhost:${PORT}`);
-    await open(`http://localhost:${PORT}`);
 });

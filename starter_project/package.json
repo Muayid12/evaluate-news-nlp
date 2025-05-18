@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-   "scripts": {
-	"start": "node src/server/index.js",
-	"build-prod": "webpack --config webpack.prod.js",
-	"build-dev": "webpack serve --config webpack.dev.js",
-	 "test": "jest"
-	},
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run build-dev\"",
+    "build-dev": "webpack serve --config webpack.dev.js --mode development",
+    "server": "node src/server/index.js",
+	"build-prod": "webpack --config webpack.prod.js && node server/index.js",
+    "test": "jest"
+  },
   "dependencies": {
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
@@ -28,6 +29,7 @@
     "babel-jest": "^29.7.0",
     "babel-loader": "^8.4.1",
     "clean-webpack-plugin": "^4.0.0",
+    "concurrently": "^9.1.2",
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.2",
     "html-webpack-plugin": "^5.6.3",
