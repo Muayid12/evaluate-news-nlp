@@ -7,7 +7,7 @@
     "start": "concurrently \"npm run server\" \"npm run build-dev\"",
     "build-dev": "webpack serve --config webpack.dev.js --mode development",
     "server": "node src/server/index.js",
-	"build-prod": "webpack --config webpack.prod.js && node src/server/index.js",
+    "build-prod": "webpack --config webpack.prod.js && node src/server/index.js",
     "test": "jest"
   },
   "dependencies": {
