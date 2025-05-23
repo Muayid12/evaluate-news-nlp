@@ -7,11 +7,10 @@
     "start": "concurrently \"npm run server\" \"npm run build-dev\"",
     "build-dev": "webpack serve --config webpack.dev.js --mode development",
     "server": "node src/server/index.js",
-    "build-prod": "webpack --config webpack.prod.js",
+    "build-prod": "webpack --config webpack.prod.js && node src/server/index.js",
     "test": "jest"
   },
   "dependencies": {
-    "@sparticuz/chromium": "^112.0.2",
     "axios": "^1.9.0",
     "cheerio": "^1.0.0",
     "cors": "^2.8.5",
