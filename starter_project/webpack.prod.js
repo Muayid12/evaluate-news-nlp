@@ -52,6 +52,9 @@ module.exports = {
         new MiniCssExtractPlugin({
             filename: "[name].[contenthash].css"
         }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
+        }),
         new WorkboxPlugin.GenerateSW({
             clientsClaim: true,
             skipWaiting: true,

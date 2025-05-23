@@ -1,6 +1,9 @@
 import { checkForURL } from './checker';
 
-const NLP_API_ENDPOINT = 'http://localhost:8081/analyze';
+// Update the endpoint to use Netlify Functions in production
+const NLP_API_ENDPOINT = process.env.NODE_ENV === 'production' 
+    ? '/.netlify/functions/analyze' 
+    : 'http://localhost:8081/analyze';
 
 async function handleSubmit(event) {
     event.preventDefault();
